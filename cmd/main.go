@@ -53,7 +53,7 @@ func main() {
 	)
 
 	go func ()  {
-		if err := server.ListenAndServe(); err != nil {
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			logger.Fatal("Failed to start the server", zap.Error(err))
 		}
 	}()
@@ -68,7 +68,9 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), wait)
 	defer cancel()
 
-	server.Shutdown(ctx)
+	if err := server.Shutdown(ctx); err != nil {
+		logger.Fatal("Server forced to shutdown", zap.Error(err))
+	}
 
 	logger.Info("shutting down")
 	os.Exit(0)
