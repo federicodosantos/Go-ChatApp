@@ -6,6 +6,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"go.uber.org/zap"
+	_ "github.com/lib/pq"
 )
 
 func DBInit(logger *zap.Logger) (*sqlx.DB) {
